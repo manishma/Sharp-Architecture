@@ -1,0 +1,6 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Default" />
+  <Config name="Default" configfile="tests\Northwind.TestsUsingDevelopmentDatabase\bin\Debug\Northwind.TestsUsingDevelopmentDatabase.dll.config" binpathtype="Auto">
+    <assembly path="tests\Northwind.TestsUsingDevelopmentDatabase\bin\Debug\Northwind.TestsUsingDevelopmentDatabase.dll" />
+  </Config>
+</NUnitProject>
