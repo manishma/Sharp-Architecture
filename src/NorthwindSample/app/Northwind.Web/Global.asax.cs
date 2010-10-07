@@ -7,6 +7,7 @@ using Castle.Windsor;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
 using MvcContrib.Castle;
+using NHibernate.Cfg;
 using Northwind.Data.NHibernateMaps;
 using Northwind.Web.CastleWindsor;
 using Northwind.Web.Controllers;
@@ -26,6 +27,7 @@ namespace Northwind.Web
         protected void Application_Start()
         {
             log4net.Config.XmlConfigurator.Configure();
+            InitializeNHibernateSession();
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new AreaViewEngine());
@@ -59,25 +61,6 @@ namespace Northwind.Web
             return container;
         }
 
-        public override void Init()
-        {
-            base.Init();
-
-            // The WebSessionStorage must be created during the Init() to tie in HttpApplication events
-            webSessionStorage = new WebSessionStorage(this);
-        }
-
-        /// <summary>
-        /// Due to issues on IIS7, the NHibernate initialization cannot reside in Init() but
-        /// must only be called once.  Consequently, we invoke a thread-safe singleton class to 
-        /// ensure it's only initialized once.
-        /// </summary>
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            NHibernateInitializer.Instance().InitializeNHibernateOnce(
-                () => InitializeNHibernateSession());
-        }
-
         /// <summary>
         /// If you need to communicate to multiple databases, you'd add a line to this method to
         /// initialize the other database as well.
@@ -86,11 +69,19 @@ namespace Northwind.Web
         {
             NHibernateSession.ConfigurationCache = new NHibernateConfigurationFileCache(
                 new string[] { "Northwind.Core" });
-            NHibernateSession.Init(
-                webSessionStorage,
-                new string[] { Server.MapPath("~/bin/Northwind.Data.dll") },
-                new AutoPersistenceModelGenerator().Generate(),
-                Server.MapPath("~/NHibernate.config"));
+
+            NHibernateSession.Storage = new WebSessionStorage(this);
+
+			var cfg = new Configuration();
+            cfg.Configure(Server.MapPath("~/NHibernate.config"));
+
+
+            NHibernateSession.AddConfiguration(
+                NHibernateSession.DefaultFactoryKey,
+                SessionFactoryCreator.Create(cfg),
+                cfg,
+                null
+                );
         }
 
         protected void Application_Error(object sender, EventArgs e)

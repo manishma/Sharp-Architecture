@@ -83,6 +83,7 @@
     <Compile Include="NHibernateMaps\Organization\EmployeeMap.cs" />
     <Compile Include="NHibernateMaps\ProductMap.cs" />
     <Compile Include="NHibernateMaps\RegionMap.cs" />
+    <Compile Include="NHibernateMaps\SessionFactoryCreator.cs" />
     <Compile Include="NHibernateMaps\SupplierMap.cs" />
     <Compile Include="NHibernateMaps\TerritoryMap.cs" />
     <Compile Include="..\..\CommonAssemblyInfo.cs">
