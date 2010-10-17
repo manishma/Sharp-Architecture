@@ -8,6 +8,8 @@
     <p id="pageMessage"><%= ViewContext.TempData[ControllerEnums.GlobalViewDataProperty.PageMessage.ToString()]%></p>
 <% } %>
 
+<% Html.EnableClientValidation(); %>
+
 <%= Html.ValidationSummary() %>
 
 <% using (Html.BeginForm()) { %>
@@ -22,27 +24,18 @@
     <ul>
 		<li>
 			<label for="Employee_FirstName">FirstName:</label>
-			<div>
-				<%= Html.TextBox("Employee.FirstName", 
-					(ViewData.Model.Employee != null) ? ViewData.Model.Employee.FirstName : "")%>
-			</div>
-			<%= Html.ValidationMessage("Employee.FirstName")%>
+			<div><%= Html.TextBoxFor(x => x.Employee.FirstName) %></div>
+			<%= Html.ValidationMessageFor(x=> x.Employee.FirstName)%>
 		</li>
 		<li>
 			<label for="Employee_LastName">LastName:</label>
-			<div>
-				<%= Html.TextBox("Employee.LastName", 
-					(ViewData.Model.Employee != null) ? ViewData.Model.Employee.LastName : "")%>
-			</div>
-			<%= Html.ValidationMessage("Employee.LastName")%>
+			<div><%= Html.TextBoxFor(x => x.Employee.LastName) %></div>
+			<%= Html.ValidationMessageFor(x=> x.Employee.LastName)%>
 		</li>
 		<li>
 			<label for="Employee_PhoneExtension">PhoneExtension:</label>
-			<div>
-				<%= Html.TextBox("Employee.PhoneExtension", 
-					(ViewData.Model.Employee != null) ? ViewData.Model.Employee.PhoneExtension.ToString() : "")%>
-			</div>
-			<%= Html.ValidationMessage("Employee.PhoneExtension")%>
+			<div><%= Html.TextBoxFor(x => x.Employee.PhoneExtension) %></div>
+			<%= Html.ValidationMessageFor(x=> x.Employee.PhoneExtension)%>
 		</li>
 		<li>
 			<label for="Employee_Territories">Territories:</label>
