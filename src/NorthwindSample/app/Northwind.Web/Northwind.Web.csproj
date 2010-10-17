@@ -95,6 +95,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\bin\NHibernate.ByteCode.Castle.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate.Linq, Version=1.1.0.1001, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\bin\NHibernate.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate.Validator, Version=1.2.0.3001, Culture=neutral, PublicKeyToken=70154e18752585bd, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\bin\NHibernate.Validator.dll</HintPath>
@@ -232,6 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Scripts\MicrosoftMvcJQueryValidation.js" />
     <Content Include="Views\Organization\Web.config" />
   </ItemGroup>
   <ItemGroup>

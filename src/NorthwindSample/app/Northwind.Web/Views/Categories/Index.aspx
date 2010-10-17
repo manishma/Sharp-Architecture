@@ -21,4 +21,10 @@
         </asp:ListView>
     </div>
     </form>
+    
+    <h2>Create new category</h2>
+    
+    <form action="/Categories/Create">
+    <%= Html.TextBox("categoryName")%> <button type="submit">Create</button>
+    </form>
 </asp:Content>

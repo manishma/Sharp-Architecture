@@ -1,29 +1,29 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using Northwind.Core;
 using SharpArch.Core.PersistenceSupport;
 using SharpArch.Core.DomainModel;
 using System.Collections.Generic;
+using SharpArch.Data.NHibernate;
 using SharpArch.Web.NHibernate;
 using System;
 using SharpArch.Core;
+using NHibernate.Linq;
 
 namespace Northwind.Web.Controllers
 {
     [HandleError]
     public class CategoriesController : Controller
     {
-        public CategoriesController(IRepository<Category> categoryRepository) {
-            Check.Require(categoryRepository != null, "categoryRepository may not be null");
-
-            this.categoryRepository = categoryRepository;
-        }
 
         /// <summary>
         /// The transaction on this action is optional, but recommended for performance reasons
         /// </summary>
         [Transaction]
-        public ActionResult Index() {
-            IList<Category> categories = categoryRepository.GetAll();
+        public ActionResult Index()
+        {
+            IList<Category> categories = 
+                NHibernateSession.Current.Linq<Category>().ToList();
             return View(categories);
         }
 
@@ -31,9 +31,22 @@ namespace Northwind.Web.Controllers
         /// The transaction on this action is optional, but recommended for performance reasons
         /// </summary>
         [Transaction]
-        public ActionResult Show(int id) {
-            Category category = categoryRepository.Get(id);
+        public ActionResult Show(int id)
+        {
+            Category category =
+                NHibernateSession.Current.Linq<Category>()
+                    .First(x => x.Id == id);
             return View(category);
+        }
+
+        [Transaction]
+        public ActionResult Delete(int id)
+        {
+            Category category =
+                NHibernateSession.Current.Linq<Category>()
+                    .First(x => x.Id == id);
+            NHibernateSession.Current.Delete(category);
+            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -43,13 +56,11 @@ namespace Northwind.Web.Controllers
         /// within a single transaction.
         /// </summary>
         [Transaction]
+        [AcceptVerbs(HttpVerbs.Get|HttpVerbs.Post)]
         public ActionResult Create(string categoryName) {
-            Category category = new Category(categoryName);
-            category = categoryRepository.SaveOrUpdate(category);
-
+            var category = new Category(categoryName);
+            NHibernateSession.Current.SaveOrUpdate(category);
             return View(category);
         }
-
-        private readonly IRepository<Category> categoryRepository;
     }
 }
