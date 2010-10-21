@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.Windsor;
 using CommonServiceLocator.WindsorAdapter;
+using log4net;
 using Microsoft.Practices.ServiceLocation;
 using MvcContrib.Castle;
 using NHibernate.Cfg;
@@ -27,6 +28,9 @@ namespace Northwind.Web
         protected void Application_Start()
         {
             log4net.Config.XmlConfigurator.Configure();
+            var log = LogManager.GetLogger("Northwind");
+            log.Info("Application_Start");
+
             InitializeNHibernateSession();
 
             ViewEngines.Engines.Clear();
